@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.util.Collection;
 
 import org.arachna.dot4j.model.Attributes;
+import org.arachna.dot4j.model.Attributes.KeyValuePair;
 import org.arachna.dot4j.model.Edge;
 import org.arachna.dot4j.model.Graph;
 import org.arachna.dot4j.model.Node;
@@ -33,12 +34,60 @@ public final class DotGenerator {
     public void generate(final Writer writer) throws IOException {
         writer.append("digraph ");
         writer.append("{\n");
-
-        writer.append(emitNodes(graph.getNodes()));
-        writer.append(emitEdges(graph.getEdges()));
-        writer.append(emitClusters(graph.getClusters()));
-
+        writer.append(this.emitGraphAttributes(this.graph.getAttributes()));
+        writer.append(emitCommonNodeAttributes());
+        writer.append(emitCommonEdgeAttributes());
+        writer.append(emitGraph(graph));
         writer.append("}\n");
+    }
+
+    /**
+     * @return
+     */
+    private String emitCommonEdgeAttributes() {
+        final StringBuffer result = new StringBuffer();
+
+        if (!graph.getEdgeAttributes().isEmpty()) {
+            result.append(String.format("edge %s;", emitAttributes(graph.getEdgeAttributes())));
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * @return
+     */
+    private String emitCommonNodeAttributes() {
+        final StringBuffer result = new StringBuffer();
+
+        if (!graph.getEdgeAttributes().isEmpty()) {
+            result.append(String.format("node %s;", emitAttributes(graph.getNodeAttributes())));
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * @param writer
+     * @throws IOException
+     */
+    private String emitGraph(final Graph graph) {
+        final StringBuffer result = new StringBuffer();
+        result.append(emitNodes(graph.getNodes()));
+        result.append(emitEdges(graph.getEdges()));
+        result.append(emitClusters(graph.getClusters()));
+
+        return result.toString();
+    }
+
+    private String emitGraphAttributes(final Attributes attributes) {
+        final StringBuffer result = new StringBuffer();
+
+        for (final KeyValuePair pair : attributes) {
+            result.append(String.format("%s = \"%s\";\n", pair.getKey(), pair.getValue()));
+        }
+
+        return result.toString();
     }
 
     protected StringBuffer emitEdges(final Collection<Edge> edges) {
@@ -92,12 +141,7 @@ public final class DotGenerator {
         final StringBuffer result = new StringBuffer();
 
         result.append(String.format("subgraph cluster%s {\n", cluster.getId()));
-        result.append(emitNodes(cluster.getNodes()));
-
-        for (final Graph subGraph : cluster.getClusters()) {
-            result.append(this.emitCluster(subGraph));
-        }
-
+        result.append(emitGraph(cluster));
         result.append("}\n");
 
         return result;

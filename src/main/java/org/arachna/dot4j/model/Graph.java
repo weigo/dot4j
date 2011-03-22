@@ -25,6 +25,21 @@ public class Graph {
     private final Graph parent;
 
     /**
+     * attributes for this graph.
+     */
+    private final Attributes attributes = new Attributes();
+
+    /**
+     * common attributes for this graphs nodes.
+     */
+    private final Attributes nodeAttributes = new Attributes();
+
+    /**
+     * common attributes for this graphs edges.
+     */
+    private final Attributes edgeAttributes = new Attributes();
+
+    /**
      * factory for cluster ids.
      */
     private final IdFactory clusterIdFactory;
@@ -151,6 +166,27 @@ public class Graph {
      */
     public Id getId() {
         return id;
+    }
+
+    /**
+     * @return the attributes
+     */
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    /**
+     * @return the edgeAttributes
+     */
+    public Attributes getEdgeAttributes() {
+        return edgeAttributes;
+    }
+
+    /**
+     * @return the nodeAttributes
+     */
+    public Attributes getNodeAttributes() {
+        return nodeAttributes;
     }
 
     protected final class IdFactory {
