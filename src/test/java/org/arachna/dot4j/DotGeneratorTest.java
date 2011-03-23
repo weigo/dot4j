@@ -153,6 +153,21 @@ public class DotGeneratorTest {
 
     /**
      * Test method for
+     * {@link org.arachna.dot4j.DotGenerator#emitCluster(org.arachna.dot4j.model.Graph)}
+     * .
+     */
+    @Test
+    public final void testEmitEmptyClusterWithAttributes() {
+        final Graph cluster = this.graph.newGraph();
+        final Attributes attributes = cluster.getAttributes();
+        attributes.setAttribute("label", "label");
+        final String result = this.generator.emitCluster(cluster).toString();
+
+        assertEquals("subgraph cluster1 {\nlabel = \"label\";\n}\n", result);
+    }
+
+    /**
+     * Test method for
      * {@link org.arachna.dot4j.DotGenerator#emitNode(org.arachna.dot4j.model.Node)}
      * .
      */
