@@ -34,9 +34,6 @@ public final class DotGenerator {
     public void generate(final Writer writer) throws IOException {
         writer.append("digraph ");
         writer.append("{\n");
-        writer.append(this.emitGraphAttributes(this.graph.getAttributes()));
-        writer.append(emitCommonNodeAttributes());
-        writer.append(emitCommonEdgeAttributes());
         writer.append(emitGraph(graph));
         writer.append("}\n");
     }
@@ -73,6 +70,10 @@ public final class DotGenerator {
      */
     private String emitGraph(final Graph graph) {
         final StringBuffer result = new StringBuffer();
+
+        result.append(this.emitGraphAttributes(graph.getAttributes()));
+        result.append(emitCommonNodeAttributes());
+        result.append(emitCommonEdgeAttributes());
         result.append(emitNodes(graph.getNodes()));
         result.append(emitEdges(graph.getEdges()));
         result.append(emitClusters(graph.getClusters()));
