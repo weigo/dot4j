@@ -30,12 +30,12 @@ public class Graph {
     private final Attributes attributes = new Attributes();
 
     /**
-     * common attributes for this graphs nodes.
+     * common attributes for this graph's nodes.
      */
     private final Attributes nodeAttributes = new Attributes();
 
     /**
-     * common attributes for this graphs edges.
+     * common attributes for this graph's edges.
      */
     private final Attributes edgeAttributes = new Attributes();
 
@@ -74,15 +74,15 @@ public class Graph {
         this.parent = parent;
 
         if (this.parent != null) {
-            this.clusterIdFactory = parent.getClusterIdFactory();
-            this.nodeIdFactory = parent.getNodeIdFactory();
+            clusterIdFactory = parent.getClusterIdFactory();
+            nodeIdFactory = parent.getNodeIdFactory();
         }
         else {
-            this.clusterIdFactory = new IdFactory();
-            this.nodeIdFactory = new IdFactory();
+            clusterIdFactory = new IdFactory();
+            nodeIdFactory = new IdFactory();
         }
 
-        this.id = this.clusterIdFactory.nextId();
+        id = clusterIdFactory.nextId();
     }
 
     /**
@@ -100,7 +100,7 @@ public class Graph {
     public Graph newGraph() {
         final Graph child = new Graph(this);
 
-        this.clusters.add(child);
+        clusters.add(child);
 
         return child;
     }
@@ -111,22 +111,34 @@ public class Graph {
      * @return creates a new node object and associates it with this cluster.
      */
     public Node newNode() {
-        final Node node = new Node(this.nodeIdFactory.nextId());
+        final Node node = new Node(nodeIdFactory.nextId());
 
-        this.nodes.add(node);
+        nodes.add(node);
 
         return node;
     }
 
+    /**
+     * Create a new edge using the given start and end nodes.
+     * 
+     * @param startNode
+     *            start node of the new edge.
+     * @param endNode
+     *            end node of the new edge.
+     * 
+     * @return a new edge between start and end node.
+     */
     public Edge newEdge(final Node startNode, final Node endNode) {
         final Edge edge = new Edge(startNode, endNode);
 
-        this.edges.add(edge);
+        edges.add(edge);
 
         return edge;
     }
 
     /**
+     * Returns the clusters (subgraphs) of this graph.
+     * 
      * @return the clusters
      */
     public Collection<Graph> getClusters() {
@@ -134,20 +146,26 @@ public class Graph {
     }
 
     /**
-     * @return the nodes
+     * Returns the nodes contained in this graph.
+     * 
+     * @return the nodes contained in this graph.
      */
     public Collection<Node> getNodes() {
         return Collections.unmodifiableCollection(nodes);
     }
 
     /**
-     * @return the edges
+     * Returns the edges contained in this graph.
+     * 
+     * @return the edges contained in this graph.
      */
     public Collection<Edge> getEdges() {
         return Collections.unmodifiableCollection(edges);
     }
 
     /**
+     * Returns the factory for cluster ids.
+     * 
      * @return the clusterIdFactory
      */
     private IdFactory getClusterIdFactory() {
@@ -155,40 +173,55 @@ public class Graph {
     }
 
     /**
+     * Returns the factory for node ids.
+     * 
      * @return the nodeIdFactory
      */
     private IdFactory getNodeIdFactory() {
-        return this.nodeIdFactory;
+        return nodeIdFactory;
     }
 
     /**
-     * @return the id
+     * Returns the id of this graph.
+     * 
+     * @return the id of this graph.
      */
     public Id getId() {
         return id;
     }
 
     /**
-     * @return the attributes
+     * Returns the attributes of this graph.
+     * 
+     * @return the attributes of this graph.
      */
     public Attributes getAttributes() {
         return attributes;
     }
 
     /**
-     * @return the edgeAttributes
+     * Returns the common attributes for the edges contained in this graph.
+     * 
+     * @return the common attributes for the edges contained in this graph.
      */
     public Attributes getEdgeAttributes() {
         return edgeAttributes;
     }
 
     /**
-     * @return the nodeAttributes
+     * Returns the common attributes for the nodes contained in this graph.
+     * 
+     * @return the common attributes for the nodes contained in this graph.
      */
     public Attributes getNodeAttributes() {
         return nodeAttributes;
     }
 
+    /**
+     * Factory for Ids.
+     * 
+     * @author Dirk Weigenand
+     */
     protected final class IdFactory {
         /**
          * counter for ids.
