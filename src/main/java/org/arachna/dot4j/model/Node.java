@@ -4,6 +4,8 @@
 package org.arachna.dot4j.model;
 
 /**
+ * A graphviz node.
+ * 
  * @author Dirk Weigenand
  */
 public final class Node {
@@ -12,6 +14,9 @@ public final class Node {
      */
     private final Id id;
 
+    /**
+     * attributes of this node.
+     */
     private final Attributes attributes = new Attributes();
 
     /**
@@ -31,6 +36,11 @@ public final class Node {
         return id;
     }
 
+    /**
+     * Returns the attributes of this node.
+     * 
+     * @return attributes of this node.
+     */
     public Attributes getAttributes() {
         return attributes;
     }
