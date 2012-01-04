@@ -11,7 +11,6 @@ import java.util.Collections;
  * A GraphViz graph.
  * 
  * @author Dirk Weigenand
- * 
  */
 public class Graph {
     /**
@@ -111,13 +110,22 @@ public class Graph {
      * @return creates a new node object and associates it with this cluster.
      */
     public Node newNode() {
-        final Node node = new Node(this.nodeIdFactory.nextId());
+        final Node node = new Node(this, this.nodeIdFactory.nextId());
 
         this.nodes.add(node);
 
         return node;
     }
 
+    /**
+     * Add a new edge to this graph.
+     * 
+     * @param startNode
+     *            start node of the new edge
+     * @param endNode
+     *            end node of the new edge
+     * @return the newly added edge
+     */
     public Edge newEdge(final Node startNode, final Node endNode) {
         final Edge edge = new Edge(startNode, endNode);
 
@@ -187,6 +195,32 @@ public class Graph {
      */
     public Attributes getNodeAttributes() {
         return nodeAttributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        return id.equals(((Graph)obj).getId());
     }
 
     protected final class IdFactory {

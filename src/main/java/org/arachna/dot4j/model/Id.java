@@ -4,12 +4,22 @@
 package org.arachna.dot4j.model;
 
 /**
- * @author Dirk Weigenand
+ * An id for graph objects.
  * 
+ * @author Dirk Weigenand
  */
 public final class Id {
+    /**
+     * unique id.
+     */
     private final long id;
 
+    /**
+     * Create an Id object with the given id value.
+     * 
+     * @param id
+     *            value of this id.
+     */
     Id(final long id) {
         this.id = id;
     }
@@ -50,5 +60,4 @@ public final class Id {
     public String toString() {
         return Long.toString(id);
     }
-
 }
