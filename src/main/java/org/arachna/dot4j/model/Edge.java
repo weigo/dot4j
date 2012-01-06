@@ -87,4 +87,12 @@ public class Edge {
     public Attributes getAttributes() {
         return attributes;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Edge [attributes=" + attributes + ", startNode=" + startNode + ", endNode=" + endNode + "]";
+    }
 }

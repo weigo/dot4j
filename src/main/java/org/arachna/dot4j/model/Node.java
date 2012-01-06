@@ -91,4 +91,12 @@ public final class Node {
 
         return this.id.equals(((Node)obj).getId());
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Node [id=" + id + ", attributes=" + attributes + "]";
+    }
 }

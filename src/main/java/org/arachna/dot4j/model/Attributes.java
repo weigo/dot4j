@@ -65,6 +65,14 @@ public class Attributes implements Iterable<Attribute> {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Attributes [attributes=" + attributes + "]";
+    }
+
+    /**
      * An attribute with a name and a corresponding value.
      * 
      * @author Dirk Weigenand
@@ -109,6 +117,14 @@ public class Attributes implements Iterable<Attribute> {
          */
         public String getValue() {
             return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "Attribute [name=" + name + ", value=" + value + "]";
         }
     }
 
