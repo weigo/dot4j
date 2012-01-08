@@ -11,7 +11,6 @@ import java.util.Collections;
  * A GraphViz graph.
  * 
  * @author Dirk Weigenand
- * 
  */
 public class Graph {
     /**
@@ -30,12 +29,12 @@ public class Graph {
     private final Attributes attributes = new Attributes();
 
     /**
-     * common attributes for this graph's nodes.
+     * common attributes for this graphs nodes.
      */
     private final Attributes nodeAttributes = new Attributes();
 
     /**
-     * common attributes for this graph's edges.
+     * common attributes for this graphs edges.
      */
     private final Attributes edgeAttributes = new Attributes();
 
@@ -111,7 +110,7 @@ public class Graph {
      * @return creates a new node object and associates it with this cluster.
      */
     public Node newNode() {
-        final Node node = new Node(nodeIdFactory.nextId());
+        final Node node = new Node(this, nodeIdFactory.nextId());
 
         nodes.add(node);
 
@@ -119,14 +118,13 @@ public class Graph {
     }
 
     /**
-     * Create a new edge using the given start and end nodes.
+     * Add a new edge to this graph.
      * 
      * @param startNode
-     *            start node of the new edge.
+     *            start node of the new edge
      * @param endNode
-     *            end node of the new edge.
-     * 
-     * @return a new edge between start and end node.
+     *            end node of the new edge
+     * @return the newly added edge
      */
     public Edge newEdge(final Node startNode, final Node endNode) {
         final Edge edge = new Edge(startNode, endNode);
@@ -137,8 +135,6 @@ public class Graph {
     }
 
     /**
-     * Returns the clusters (subgraphs) of this graph.
-     * 
      * @return the clusters
      */
     public Collection<Graph> getClusters() {
@@ -146,26 +142,20 @@ public class Graph {
     }
 
     /**
-     * Returns the nodes contained in this graph.
-     * 
-     * @return the nodes contained in this graph.
+     * @return the nodes
      */
     public Collection<Node> getNodes() {
         return Collections.unmodifiableCollection(nodes);
     }
 
     /**
-     * Returns the edges contained in this graph.
-     * 
-     * @return the edges contained in this graph.
+     * @return the edges
      */
     public Collection<Edge> getEdges() {
         return Collections.unmodifiableCollection(edges);
     }
 
     /**
-     * Returns the factory for cluster ids.
-     * 
      * @return the clusterIdFactory
      */
     private IdFactory getClusterIdFactory() {
@@ -173,8 +163,6 @@ public class Graph {
     }
 
     /**
-     * Returns the factory for node ids.
-     * 
      * @return the nodeIdFactory
      */
     private IdFactory getNodeIdFactory() {
@@ -182,45 +170,75 @@ public class Graph {
     }
 
     /**
-     * Returns the id of this graph.
-     * 
-     * @return the id of this graph.
+     * @return the id
      */
     public Id getId() {
         return id;
     }
 
     /**
-     * Returns the attributes of this graph.
-     * 
-     * @return the attributes of this graph.
+     * @return the attributes
      */
     public Attributes getAttributes() {
         return attributes;
     }
 
     /**
-     * Returns the common attributes for the edges contained in this graph.
-     * 
-     * @return the common attributes for the edges contained in this graph.
+     * @return the edgeAttributes
      */
     public Attributes getEdgeAttributes() {
         return edgeAttributes;
     }
 
     /**
-     * Returns the common attributes for the nodes contained in this graph.
-     * 
-     * @return the common attributes for the nodes contained in this graph.
+     * @return the nodeAttributes
      */
     public Attributes getNodeAttributes() {
         return nodeAttributes;
     }
 
     /**
-     * Factory for Ids.
+     * Get the parent graph.
+     * 
+     * @return the parent graph or <code>null</code> if this is teh top level
+     *         graph.
+     */
+    public Graph getParent() {
+        return parent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        return id.equals(((Graph)obj).getId());
+    }
+
+    /**
+     * Factory for Ids to use in {@link Graph}s when creating {@link Node}
+     * objects and/or sub graphs.
      * 
      * @author Dirk Weigenand
+     * 
      */
     protected final class IdFactory {
         /**

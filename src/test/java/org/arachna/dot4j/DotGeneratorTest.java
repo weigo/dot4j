@@ -18,28 +18,42 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author Dirk Weigenand
+ * JUnit tests for {@link DotGenerator}.
  * 
+ * @author Dirk Weigenand
  */
 public class DotGeneratorTest {
+    /**
+     * 
+     */
+    private static final String LABEL = "label";
+
+    /**
+     * Graph to serialize as <code>.dot</code>.
+     */
     private Graph graph;
+
+    /**
+     * DotGenerator under test.
+     */
     private DotGenerator generator;
 
     /**
-     * @throws java.lang.Exception
+     * Setup test instances.
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.graph = new Graph();
         this.generator = new DotGenerator(this.graph);
     }
 
     /**
-     * @throws java.lang.Exception
+     * nullify test instances.
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         this.graph = null;
+        this.generator = null;
     }
 
     /**
@@ -92,16 +106,19 @@ public class DotGeneratorTest {
     /**
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#emitEdges(java.util.Collection)}.
+     * 
+     * @throws IOException
      */
     @Test
-    public final void testEmitEdgesWithoutAttributes() {
+    public final void testEmitEdgesWithoutAttributes() throws IOException {
         final Node start = graph.newNode();
         final Node middle = graph.newNode();
         final Node end = graph.newNode();
 
         final Edge firstEdge = graph.newEdge(start, middle);
         final Edge secondEdge = graph.newEdge(middle, end);
-        final String result = this.generator.emitEdges(Arrays.asList(new Edge[] { firstEdge, secondEdge })).toString();
+        StringWriter result = new StringWriter();
+        this.generator.emitEdges(Arrays.asList(new Edge[] { firstEdge, secondEdge }), result);
 
         assertEquals("node0 -> node1;\nnode1 -> node2;\n", result.toString());
     }
@@ -128,42 +145,51 @@ public class DotGeneratorTest {
      * .
      * 
      * @throws IOException
+     *             when writing the .dot file fails
      */
     @Test
-    public final void testEmitClusters() {
+    public final void testEmitClusters() throws IOException {
         final Graph firstCluster = this.graph.newGraph();
         final Graph secondCluster = this.graph.newGraph();
-        final String result =
-            this.generator.emitClusters(Arrays.asList(new Graph[] { firstCluster, secondCluster })).toString();
+        final StringWriter result = new StringWriter();
+        this.generator.emitClusters(Arrays.asList(new Graph[] { firstCluster, secondCluster }), result);
 
-        assertEquals("subgraph cluster1 {\n}\nsubgraph cluster2 {\n}\n", result);
+        assertEquals("subgraph cluster1 {\n}\nsubgraph cluster2 {\n}\n", result.toString());
     }
 
     /**
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#emitCluster(org.arachna.dot4j.model.Graph)}
      * .
+     * 
+     * @throws IOException
+     *             when writing the .dot file fails
      */
     @Test
-    public final void testEmitEmptyCluster() {
-        final String result = this.generator.emitCluster(graph).toString();
+    public final void testEmitEmptyCluster() throws IOException {
+        final StringWriter result = new StringWriter();
+        this.generator.emitCluster(graph, result);
 
-        assertEquals("subgraph cluster0 {\n}\n", result);
+        assertEquals("subgraph cluster0 {\n}\n", result.toString());
     }
 
     /**
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#emitCluster(org.arachna.dot4j.model.Graph)}
      * .
+     * 
+     * @throws IOException
+     *             when writing the .dot file fails
      */
     @Test
-    public final void testEmitEmptyClusterWithAttributes() {
+    public final void testEmitEmptyClusterWithAttributes() throws IOException {
         final Graph cluster = this.graph.newGraph();
         final Attributes attributes = cluster.getAttributes();
-        attributes.setAttribute("label", "label");
-        final String result = this.generator.emitCluster(cluster).toString();
+        attributes.setAttribute(LABEL, LABEL);
+        final StringWriter result = new StringWriter();
+        this.generator.emitCluster(cluster, result);
 
-        assertEquals("subgraph cluster1 {\nlabel = \"label\";\n}\n", result);
+        assertEquals("subgraph cluster1 {\nlabel = \"label\";\n}\n", result.toString());
     }
 
     /**
@@ -175,7 +201,7 @@ public class DotGeneratorTest {
     public final void testEmitNodeWithAttribute() {
         final Node node = this.graph.newNode();
         final Attributes attributes = node.getAttributes();
-        attributes.setAttribute("label", "label");
+        attributes.setAttribute(LABEL, LABEL);
         attributes.setAttribute("font", "Helvetica");
 
         final String result = this.generator.emitNode(node);
@@ -205,7 +231,7 @@ public class DotGeneratorTest {
     @Test
     public final void testEmitNonEmptyAttribute() {
         final Attributes attributes = new Attributes();
-        attributes.setAttribute("label", "label");
+        attributes.setAttribute(LABEL, LABEL);
 
         final String result = this.generator.emitAttributes(attributes).toString();
 
@@ -220,7 +246,7 @@ public class DotGeneratorTest {
     @Test
     public final void testEmitTwoNonEmptyAttributes() {
         final Attributes attributes = new Attributes();
-        attributes.setAttribute("label", "label");
+        attributes.setAttribute(LABEL, LABEL);
         attributes.setAttribute("font", "Helvetica");
 
         final String result = this.generator.emitAttributes(attributes).toString();
