@@ -31,6 +31,9 @@ public class CommonEdgeMergeAlgorithm {
         this.graph = graph;
     }
 
+    /**
+     * Execute the merge algorithm.
+     */
     public void execute() {
         mergeEdgesWithSameTargetAndSameOriginatingGraph(collectEdgesToSameNode(graph));
 
@@ -53,6 +56,14 @@ public class CommonEdgeMergeAlgorithm {
         mergeEdgesWithSameTargetAndDifferingOriginatingGrap(mergableEdges);
     }
 
+    /**
+     * Merge edges that have the same target but emanate from different graphs.
+     * Inserts a new invisible graph containing the new intermediate target
+     * node.
+     * 
+     * @param mergableEdges
+     *            map of edges that can be merged.
+     */
     private void mergeEdgesWithSameTargetAndDifferingOriginatingGrap(final Map<Node, Collection<Edge>> mergableEdges) {
         for (final Map.Entry<Node, Collection<Edge>> entry : mergableEdges.entrySet()) {
             final Collection<Edge> edges = entry.getValue();
@@ -61,11 +72,7 @@ public class CommonEdgeMergeAlgorithm {
                 final Node target = entry.getKey();
                 final Graph parentGraph = graph.newGraph();
                 parentGraph.getAttributes().setAttribute("style", "invis");
-                final Node intermediateTarget = parentGraph.newNode();
-                intermediateTarget.getAttributes().setAttribute("shape", "none");
-                intermediateTarget.getAttributes().setAttribute("label", "");
-                intermediateTarget.getAttributes().setAttribute("height", "0");
-                intermediateTarget.getAttributes().setAttribute("width", "0");
+                final Node intermediateTarget = createIntermediateTargetNode(parentGraph);
 
                 parentGraph.newEdge(intermediateTarget, target);
 
@@ -77,7 +84,28 @@ public class CommonEdgeMergeAlgorithm {
     }
 
     /**
-     * @param edges
+     * Create the new intermediate target node for merge-able edges.
+     * 
+     * @param parentGraph
+     *            the parent graph that will contain the new intermediate node.
+     * @return returns the configured intermediate node
+     */
+    protected Node createIntermediateTargetNode(final Graph parentGraph) {
+        final Node intermediateTarget = parentGraph.newNode();
+
+        intermediateTarget.getAttributes().setAttribute("shape", "none");
+        intermediateTarget.getAttributes().setAttribute("label", "");
+        intermediateTarget.getAttributes().setAttribute("height", "0");
+        intermediateTarget.getAttributes().setAttribute("width", "0");
+
+        return intermediateTarget;
+    }
+
+    /**
+     * Collect edges in the given graph that have the same target node. The
+     * edges will be associated to
+     * 
+     * @param graph
      */
     protected Map<Graph, Map<Node, Collection<Edge>>> collectEdgesToSameNode(final Graph graph) {
         final Map<Graph, Map<Node, Collection<Edge>>> sourceGraphs = new HashMap<Graph, Map<Node, Collection<Edge>>>();
@@ -114,17 +142,17 @@ public class CommonEdgeMergeAlgorithm {
 
                 if (nodeEdgeMapping == null) {
                     sourceGraphs.put(entry.getKey(), entry.getValue());
+                    continue;
                 }
-                else {
-                    for (final Map.Entry<Node, Collection<Edge>> mapping : entry.getValue().entrySet()) {
-                        final Collection<Edge> edges = nodeEdgeMapping.get(mapping.getKey());
 
-                        if (edges == null) {
-                            nodeEdgeMapping.put(mapping.getKey(), mapping.getValue());
-                        }
-                        else {
-                            edges.addAll(mapping.getValue());
-                        }
+                for (final Map.Entry<Node, Collection<Edge>> mapping : entry.getValue().entrySet()) {
+                    final Collection<Edge> edges = nodeEdgeMapping.get(mapping.getKey());
+
+                    if (edges == null) {
+                        nodeEdgeMapping.put(mapping.getKey(), mapping.getValue());
+                    }
+                    else {
+                        edges.addAll(mapping.getValue());
                     }
                 }
 
@@ -154,11 +182,7 @@ public class CommonEdgeMergeAlgorithm {
                         mergedEdges.put(target, newEdges);
                     }
 
-                    final Node startNode = sourceGraph.newNode();
-                    startNode.getAttributes().setAttribute("shape", "none");
-                    startNode.getAttributes().setAttribute("label", "");
-                    startNode.getAttributes().setAttribute("height", "0");
-                    startNode.getAttributes().setAttribute("width", "0");
+                    final Node startNode = createIntermediateTargetNode(sourceGraph);
                     newEdges.add(graph.newEdge(startNode, target));
 
                     for (final Edge edge : edges) {
