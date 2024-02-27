@@ -3,15 +3,14 @@
  */
 package org.arachna.dot4j.model;
 
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItem;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 /**
  * JUnit test case for {@link CommonEdgeMergeAlgorithm}.
@@ -32,7 +31,7 @@ public class CommonEdgeMergeAlgorithmTest {
     /**
      * @throws java.lang.Exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.graph = new Graph();
         this.algorithm = new CommonEdgeMergeAlgorithm(graph);
@@ -41,7 +40,7 @@ public class CommonEdgeMergeAlgorithmTest {
     /**
      * @throws java.lang.Exception
      */
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
@@ -51,9 +50,9 @@ public class CommonEdgeMergeAlgorithmTest {
      */
     @Test
     public final void testExecuteWithEmptyGraph() {
-        assertThat(graph.getEdges(), (Matcher)empty());
+        assertThat(graph.getEdges(), empty());
         algorithm.execute();
-        assertThat(graph.getEdges(), (Matcher)empty());
+        assertThat(graph.getEdges(), empty());
     }
 
     /**
@@ -76,8 +75,8 @@ public class CommonEdgeMergeAlgorithmTest {
         Edge edge0 = graph.newEdge(graph.newNode(), graph.newNode());
         Edge edge1 = graph.newEdge(graph.newNode(), graph.newNode());
         algorithm.execute();
-        assertThat(graph.getEdges(), (Matcher)hasItem(edge0));
-        assertThat(graph.getEdges(), (Matcher)hasItem(edge1));
+        assertThat(graph.getEdges(), hasItem(edge0));
+        assertThat(graph.getEdges(), hasItem(edge1));
     }
 
     /**
@@ -90,8 +89,8 @@ public class CommonEdgeMergeAlgorithmTest {
         Edge edge0 = graph.newEdge(graph.newNode(), target);
         Edge edge1 = graph.newEdge(graph.newNode(), target);
         algorithm.execute();
-        assertThat(graph.getEdges(), (Matcher)hasItem(edge0));
-        assertThat(graph.getEdges(), (Matcher)hasItem(edge1));
+        assertThat(graph.getEdges(), hasItem(edge0));
+        assertThat(graph.getEdges(), hasItem(edge1));
         assertThat(graph.getEdges(), hasSize(3));
     }
 }
