@@ -44,24 +44,24 @@ public class Graph {
     /**
      * factory for node ids.
      */
-    private IdFactory nodeIdFactory;
+    private final IdFactory nodeIdFactory;
 
     /**
      * Clusters contained in this graph.
      */
-    private final Collection<Graph> clusters = new ArrayList<Graph>();
+    private final Collection<Graph> clusters = new ArrayList<>();
 
     /**
      * nodes contained in this graph/cluster.
      */
-    private final Collection<Node> nodes = new ArrayList<Node>();
+    private final Collection<Node> nodes = new ArrayList<>();
 
     private final Map<String, Collection<Node>> rankedNodes = new HashMap<>();
 
     /**
      * edges in this graph.
      */
-    private final Collection<Edge> edges = new ArrayList<Edge>();
+    private final Collection<Edge> edges = new ArrayList<>();
 
     /**
      * Create a subgraph or cluster with the given parent graph.
@@ -200,7 +200,7 @@ public class Graph {
     /**
      * Get the parent graph.
      * 
-     * @return the parent graph or <code>null</code> if this is teh top level
+     * @return the parent graph or <code>null</code> if this is the top level
      *         graph.
      */
     public Graph getParent() {
@@ -233,6 +233,11 @@ public class Graph {
         return id.equals(((Graph)obj).getId());
     }
 
+    /**
+     * Register the given node with the given rank. This lets nodes have the same position in the generated graph
+     * @param rank name to group nodes with
+     * @param node node to assign rank to
+     */
     public void rank(String rank, Node node) {
         this.rankedNodes.computeIfAbsent(rank, key -> new ArrayList<>()).add(node);
     }
@@ -248,7 +253,7 @@ public class Graph {
      * @author Dirk Weigenand
      * 
      */
-    protected final class IdFactory {
+    protected static final class IdFactory {
         /**
          * counter for ids.
          */

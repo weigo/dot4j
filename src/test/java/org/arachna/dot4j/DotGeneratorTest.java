@@ -20,12 +20,12 @@ import static org.hamcrest.Matchers.equalTo;
 
 /**
  * JUnit tests for {@link DotGenerator}.
- * 
+ *
  * @author Dirk Weigenand
  */
 public class DotGeneratorTest {
     /**
-     * 
+     *
      */
     private static final String LABEL = "label";
 
@@ -61,8 +61,8 @@ public class DotGeneratorTest {
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#DotGenerator(org.arachna.dot4j.model.Graph)}
      * .
-     * 
-     * @throws IOException
+     *
+     * @throws IOException when writing fails
      */
     @Test
     public final void testGenerateEmptyGraph() throws IOException {
@@ -76,7 +76,7 @@ public class DotGeneratorTest {
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#generate(java.io.Writer)}.
      *
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     @Test
     public final void testGenerateOneNode() throws IOException {
@@ -84,14 +84,14 @@ public class DotGeneratorTest {
         final StringWriter result = new StringWriter();
         this.generator.generate(result);
 
-        assertThat("digraph {\nnode0;\n}\n", equalTo( result.toString()));
+        assertThat("digraph {\nnode0;\n}\n", equalTo(result.toString()));
     }
 
     /**
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#generate(java.io.Writer)}.
      *
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     @Test
     public final void testGenerateTwoNodes() throws IOException {
@@ -101,14 +101,14 @@ public class DotGeneratorTest {
         final StringWriter result = new StringWriter();
         this.generator.generate(result);
 
-        assertThat("digraph {\nnode0;\nnode1;\n}\n", equalTo( result.toString()));
+        assertThat("digraph {\nnode0;\nnode1;\n}\n", equalTo(result.toString()));
     }
 
     /**
      * Test method for
      * {@link org.arachna.dot4j.DotGenerator#emitEdges(java.util.Collection)}.
      *
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     @Test
     public final void testEmitEdgesWithoutAttributes() throws IOException {
@@ -119,9 +119,9 @@ public class DotGeneratorTest {
         final Edge firstEdge = graph.newEdge(start, middle);
         final Edge secondEdge = graph.newEdge(middle, end);
         StringWriter result = new StringWriter();
-        this.generator.emitEdges(Arrays.asList(new Edge[] { firstEdge, secondEdge }), result);
+        this.generator.emitEdges(Arrays.asList(firstEdge, secondEdge), result);
 
-        assertThat("node0 -> node1;\nnode1 -> node2;\n", equalTo( result.toString()));
+        assertThat("node0 -> node1;\nnode1 -> node2;\n", equalTo(result.toString()));
     }
 
     /**
@@ -137,7 +137,7 @@ public class DotGeneratorTest {
         final Edge edge = graph.newEdge(start, end);
         final String result = this.generator.emitEdge(edge);
 
-        assertThat("node0 -> node1;\n", equalTo( result.toString()));
+        assertThat("node0 -> node1;\n", equalTo(result));
     }
 
     /**
@@ -145,17 +145,16 @@ public class DotGeneratorTest {
      * {@link org.arachna.dot4j.DotGenerator#emitClusters(java.util.Collection)}
      * .
      *
-     * @throws IOException
-     *             when writing the .dot file fails
+     * @throws IOException when writing the .dot file fails
      */
     @Test
     public final void testEmitClusters() throws IOException {
         final Graph firstCluster = this.graph.newGraph();
         final Graph secondCluster = this.graph.newGraph();
         final StringWriter result = new StringWriter();
-        this.generator.emitClusters(Arrays.asList(new Graph[] { firstCluster, secondCluster }), result);
+        this.generator.emitClusters(Arrays.asList(firstCluster, secondCluster), result);
 
-        assertThat("subgraph cluster1 {\n}\nsubgraph cluster2 {\n}\n", equalTo( result.toString()));
+        assertThat("subgraph cluster1 {\n}\nsubgraph cluster2 {\n}\n", equalTo(result.toString()));
     }
 
     /**
@@ -163,15 +162,14 @@ public class DotGeneratorTest {
      * {@link org.arachna.dot4j.DotGenerator#emitCluster(org.arachna.dot4j.model.Graph)}
      * .
      *
-     * @throws IOException
-     *             when writing the .dot file fails
+     * @throws IOException when writing the .dot file fails
      */
     @Test
     public final void testEmitEmptyCluster() throws IOException {
         final StringWriter result = new StringWriter();
         this.generator.emitCluster(graph, result);
 
-        assertThat("subgraph cluster0 {\n}\n", equalTo( result.toString()));
+        assertThat("subgraph cluster0 {\n}\n", equalTo(result.toString()));
     }
 
     /**
@@ -179,8 +177,7 @@ public class DotGeneratorTest {
      * {@link org.arachna.dot4j.DotGenerator#emitCluster(org.arachna.dot4j.model.Graph)}
      * .
      *
-     * @throws IOException
-     *             when writing the .dot file fails
+     * @throws IOException when writing the .dot file fails
      */
     @Test
     public final void testEmitEmptyClusterWithAttributes() throws IOException {
@@ -190,7 +187,7 @@ public class DotGeneratorTest {
         final StringWriter result = new StringWriter();
         this.generator.emitCluster(cluster, result);
 
-        assertThat("subgraph cluster1 {\nlabel = \"label\";\n}\n", equalTo( result.toString()));
+        assertThat("subgraph cluster1 {\nlabel = \"label\";\n}\n", equalTo(result.toString()));
     }
 
     /**
@@ -207,7 +204,7 @@ public class DotGeneratorTest {
 
         final String result = this.generator.emitNode(node);
 
-        assertThat("node0 [ font=\"Helvetica\" label=\"label\"];\n", equalTo( result));
+        assertThat("node0 [ font=\"Helvetica\" label=\"label\"];\n", equalTo(result));
     }
 
     /**
@@ -221,7 +218,7 @@ public class DotGeneratorTest {
 
         final String result = this.generator.emitAttributes(attributes).toString();
 
-        assertThat("", equalTo( result));
+        assertThat("", equalTo(result));
     }
 
     /**
@@ -236,7 +233,7 @@ public class DotGeneratorTest {
 
         final String result = this.generator.emitAttributes(attributes).toString();
 
-        assertThat(" [ label=\"label\"]", equalTo( result));
+        assertThat(" [ label=\"label\"]", equalTo(result));
     }
 
     /**
@@ -252,6 +249,6 @@ public class DotGeneratorTest {
 
         final String result = this.generator.emitAttributes(attributes).toString();
 
-        assertThat(" [ font=\"Helvetica\" label=\"label\"]", equalTo( result));
+        assertThat(" [ font=\"Helvetica\" label=\"label\"]", equalTo(result));
     }
 }

@@ -3,7 +3,6 @@
  */
 package org.arachna.dot4j.model;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,21 +27,12 @@ public class CommonEdgeMergeAlgorithmTest {
      */
     private Graph graph;
 
-    /**
-     * @throws java.lang.Exception
-     */
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp()  {
         this.graph = new Graph();
         this.algorithm = new CommonEdgeMergeAlgorithm(graph);
     }
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @AfterEach
-    public void tearDown() throws Exception {
-    }
 
     /**
      * Test method for

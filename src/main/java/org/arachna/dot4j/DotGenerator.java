@@ -57,7 +57,7 @@ public final class DotGenerator {
      * The returned string is empty if there are no common edge attributes
      * defined.
      *
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     private void emitCommonEdgeAttributes(Writer writer) throws IOException {
         if (!graph.getEdgeAttributes().isEmpty()) {
@@ -68,12 +68,11 @@ public final class DotGenerator {
     /**
      * Create common attributes for nodes in the graph.
      * <p>
-     * <p>
      * The returned string is empty if there are no common node attributes
      * defined.
      *
-     * @param writer
-     * @throws IOException
+     * @param writer to write graph into
+     * @throws IOException when writing fails
      */
     private void emitCommonNodeAttributes(Writer writer) throws IOException {
         if (!graph.getEdgeAttributes().isEmpty()) {
@@ -86,28 +85,23 @@ public final class DotGenerator {
      *
      * @param graph  the graph to generate the <code>.dot</code> representation
      *               from
-     * @param writer
-     * @return the <code>.dot</code> representation of the given edges.
-     * @throws IOException
+     * @param writer the {@link Writer} object to write the graph into
+     * @throws IOException when writing fails
      */
-    private String emitGraph(final Graph graph, Writer writer) throws IOException {
-        String result = "";
-
+    private void emitGraph(final Graph graph, Writer writer) throws IOException {
         this.emitGraphAttributes(graph.getAttributes(), writer);
         emitCommonNodeAttributes(writer);
         emitCommonEdgeAttributes(writer);
         emitNodes(graph, writer);
         emitEdges(graph.getEdges(), writer);
         emitClusters(graph.getClusters(), writer);
-
-        return result;
     }
 
     /**
      * Generate the attribute representation for the given attributes.
      *
      * @param attributes attributes of a graph.
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     private void emitGraphAttributes(final Attributes attributes, Writer writer) throws IOException {
         for (final Attribute attribute : attributes) {
@@ -142,7 +136,7 @@ public final class DotGenerator {
      * Emit the clusters of the graph.
      *
      * @param clusters a collection of clusters contained in this graph.
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     void emitClusters(final Collection<Graph> clusters, Writer writer) throws IOException {
         for (final Graph cluster : clusters) {
@@ -155,7 +149,7 @@ public final class DotGenerator {
      *
      * @param graph whose nodes to emit.
      * @param writer to write into
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     private void emitNodes(final Graph graph, Writer writer) throws IOException {
         Set<Id> emittedNodes = new HashSet<>();
@@ -178,7 +172,7 @@ public final class DotGenerator {
      * Emit a cluster of this graph.
      *
      * @param cluster cluster to emit
-     * @throws IOException
+     * @throws IOException when writing fails
      */
     void emitCluster(final Graph cluster, Writer writer) throws IOException {
         writer.append(String.format("subgraph cluster%s {\n", cluster.getId()));
@@ -202,8 +196,8 @@ public final class DotGenerator {
      * @param attributes the attributes to emit
      * @return the <code>.dot</code> representation of the given attributes.
      */
-    StringBuffer emitAttributes(final Attributes attributes) {
-        final StringBuffer result = new StringBuffer();
+    StringBuilder emitAttributes(final Attributes attributes) {
+        final StringBuilder result = new StringBuilder();
 
         if (!attributes.isEmpty()) {
             result.append(" [");
