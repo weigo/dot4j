@@ -3,9 +3,7 @@
  */
 package org.arachna.dot4j.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * A GraphViz graph.
@@ -57,6 +55,8 @@ public class Graph {
      * nodes contained in this graph/cluster.
      */
     private final Collection<Node> nodes = new ArrayList<Node>();
+
+    private final Map<String, Collection<Node>> rankedNodes = new HashMap<>();
 
     /**
      * edges in this graph.
@@ -231,6 +231,14 @@ public class Graph {
         }
 
         return id.equals(((Graph)obj).getId());
+    }
+
+    public void rank(String rank, Node node) {
+        this.rankedNodes.computeIfAbsent(rank, key -> new ArrayList<>()).add(node);
+    }
+
+    public Map<String, Collection<Node>> getRankedNodes() {
+        return rankedNodes;
     }
 
     /**
