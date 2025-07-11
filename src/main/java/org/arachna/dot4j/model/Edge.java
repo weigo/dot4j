@@ -95,4 +95,19 @@ public class Edge {
     public String toString() {
         return "Edge [attributes=" + attributes + ", startNode=" + startNode + ", endNode=" + endNode + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Edge edge = (Edge) o;
+        return startNode.equals(edge.startNode) && endNode.equals(edge.endNode);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startNode.hashCode();
+        result = 31 * result + endNode.hashCode();
+        return result;
+    }
 }

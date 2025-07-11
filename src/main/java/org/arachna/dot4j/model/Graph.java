@@ -61,7 +61,7 @@ public class Graph {
     /**
      * edges in this graph.
      */
-    private final Collection<Edge> edges = new ArrayList<>();
+    private final Map<String, Edge> edges = new HashMap<>();
 
     /**
      * Create a subgraph or cluster with the given parent graph.
@@ -127,11 +127,8 @@ public class Graph {
      * @return the newly added edge
      */
     public Edge newEdge(final Node startNode, final Node endNode) {
-        final Edge edge = new Edge(startNode, endNode);
-
-        edges.add(edge);
-
-        return edge;
+        String key = startNode.getId() + "->" + endNode.getId();
+        return edges.computeIfAbsent(key, k -> new Edge(startNode, endNode));
     }
 
     /**
@@ -152,7 +149,7 @@ public class Graph {
      * @return the edges
      */
     public Collection<Edge> getEdges() {
-        return Collections.unmodifiableCollection(edges);
+        return Collections.unmodifiableCollection(edges.values());
     }
 
     /**

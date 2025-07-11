@@ -203,7 +203,12 @@ public final class DotGenerator {
             result.append(" [");
 
             for (final Attributes.Attribute attribute : attributes) {
-                result.append(String.format(" %s=\"%s\"", attribute.getName(), attribute.getValue()));
+                if (attribute.getValue().startsWith("<") && attribute.getValue().endsWith(">")) {
+                    result.append(String.format(" %s=%s", attribute.getName(), attribute.getValue()));
+                } else {
+                    result.append(String.format(" %s=\"%s\"", attribute.getName(), attribute.getValue()));
+
+                }
             }
 
             result.append("]");
